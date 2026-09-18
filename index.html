@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QVocab — Translate. Save. Train.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #f5f5f7;
+            --bg-card: #ffffff;
+            --text-primary: #141414;
+            --text-secondary: #6e6e73;
+            --accent-purple: #6f47eb;
+            --accent-purple-light: #f0ebff;
+            --accent-mint: #e2f9ee;
+            --accent-mint-text: #0d8a52;
+            --accent-blue-light: #f0f4ff;
+            --border-color: #e5e5ea;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 10px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 32px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
+            padding: 48px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 32px 24px;
+            }
+        }
+
+        /* Left Column - Brand & Info */
+        .brand-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .brand-logo {
+            width: 44px;
+            height: 44px;
+            background: #000;
+            color: #fff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 24px;
+        }
+
+        .brand-name {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .title {
+            font-size: 44px;
+            line-height: 1.15;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 36px;
+        }
+
+        .email-form {
+            display: flex;
+            gap: 10px;
+            background: #f0f0f2;
+            padding: 6px;
+            border-radius: 16px;
+            max-width: 440px;
+        }
+
+        .email-input {
+            border: none;
+            background: transparent;
+            padding: 12px 16px;
+            font-size: 15px;
+            width: 100%;
+            outline: none;
+        }
+
+        .submit-btn {
+            background: var(--text-primary);
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: opacity 0.2s;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Right Column - Demo Showcase */
+        .preview-box {
+            background: var(--bg-main);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .preview-card {
+            background: #fff;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .badge-purple {
+            background: var(--accent-purple-light);
+            color: var(--accent-purple);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .word-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .word-item:last-child {
+            border-bottom: none;
+        }
+
+        .word-term {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .word-trans {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .feature-pills {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .pill {
+            background: var(--accent-mint);
+            padding: 14px 10px;
+            border-radius: var(--radius-md);
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent-mint-text);
+        }
+
+        .pill:nth-child(2) {
+            background: var(--accent-purple-light);
+            color: var(--accent-purple);
+        }
+
+        .pill:nth-child(3) {
+            background: var(--accent-blue-light);
+            color: #2b56d0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Left Column -->
+        <div class="main-info">
+            <div class="brand-header">
+                <div class="brand-logo">Q</div>
+                <div class="brand-name">Vocab</div>
+            </div>
+
+            <h1 class="title">Translate.<br>Save. Train.</h1>
+            <p class="subtitle">
+                Переводите слова прямо на страницах сайтов, сохраняйте их в личные коллекции и тренируйте с помощью умных квизов.
+            </p>
+
+            <form class="email-form" onsubmit="alert('Спасибо! Мы уведомим вас о запуске.'); return false;">
+                <input type="email" class="email-input" placeholder="Введите ваш Email" required>
+                <button type="submit" class="submit-btn">Узнать о запуске</button>
+            </form>
+        </div>
+
+        <!-- Right Column (App Style Demo) -->
+        <div class="preview-box">
+            <div class="preview-card">
+                <div class="card-header">
+                    <span class="card-title">Мой словарь</span>
+                    <span class="badge-purple">Расширение готовятся к релизу</span>
+                </div>
+                
+                <div class="word-item">
+                    <span class="word-term">distributed</span>
+                    <span class="word-trans">распределенный</span>
+                </div>
+                <div class="word-item">
+                    <span class="word-term">broadly distributed</span>
+                    <span class="word-trans">широко распространенный</span>
+                </div>
+                <div class="word-item">
+                    <span class="word-term">verifiability</span>
+                    <span class="word-trans">проверяемость</span>
+                </div>
+            </div>
+
+            <div class="feature-pills">
+                <div class="pill">⚡ Вставить список</div>
+                <div class="pill">➕ Вручную</div>
+                <div class="pill">📁 Загрузить файл</div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
