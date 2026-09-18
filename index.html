@@ -240,8 +240,12 @@
                 Переводите слова прямо на страницах сайтов, сохраняйте их в личные коллекции и тренируйте с помощью умных квизов.
             </p>
 
-            <form class="email-form" onsubmit="alert('Спасибо! Мы уведомим вас о запуске.'); return false;">
-                <input type="email" class="email-input" placeholder="Введите ваш Email" required>
+            <form action="https://api.web3forms.com/submit" method="POST" class="email-form">
+                <!-- Замените значение value ниже на ваш личный ключ с web3forms.com -->
+                <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY">
+                <input type="hidden" name="subject" value="Новая подписка на QVocab!">
+                
+                <input type="email" name="email" class="email-input" placeholder="Введите ваш Email" required>
                 <button type="submit" class="submit-btn">Узнать о запуске</button>
             </form>
         </div>
@@ -251,7 +255,7 @@
             <div class="preview-card">
                 <div class="card-header">
                     <span class="card-title">Мой словарь</span>
-                    <span class="badge-purple">Расширение готовятся к релизу</span>
+                    <span class="badge-purple">Расширение готовится к релизу</span>
                 </div>
                 
                 <div class="word-item">
