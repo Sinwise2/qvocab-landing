@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -266,16 +266,16 @@
 
             <h1 class="title">Translate.<br>Save. Train.</h1>
             <p class="subtitle">
-                Переводите слова прямо на страницах сайтов, сохраняйте их в личные коллекции и тренируйте с помощью умных квизов.
+                Translate words directly on any website, save them to personal collections, and master them with smart quizzes.
             </p>
 
             <div class="form-wrapper">
                 <form id="subscribeForm" class="email-form">
                     <input type="hidden" name="access_key" value="a2127614-501f-427a-9459-519f3a46e6da">
-                    <input type="hidden" name="subject" value="Новая подписка на QVocab!">
+                    <input type="hidden" name="subject" value="New QVocab launch notification signup!">
                     
-                    <input type="email" name="email" class="email-input" placeholder="Введите ваш Email" required>
-                    <button type="submit" id="submitBtn" class="submit-btn">Узнать о запуске</button>
+                    <input type="email" name="email" class="email-input" placeholder="Enter your email" required>
+                    <button type="submit" id="submitBtn" class="submit-btn">Notify me at launch</button>
                 </form>
                 <div id="formMessage" class="form-message" role="status" aria-live="polite" aria-atomic="true"></div>
             </div>
@@ -285,28 +285,28 @@
         <div class="preview-box">
             <div class="preview-card">
                 <div class="card-header">
-                    <span class="card-title">Мой словарь</span>
-                    <span class="badge-purple">Расширение готовится к релизу</span>
+                    <span class="card-title">My vocabulary</span>
+                    <span class="badge-purple">Extension coming soon</span>
                 </div>
                 
                 <div class="word-item">
                     <span class="word-term">distributed</span>
-                    <span class="word-trans">распределенный</span>
+                    <span class="word-trans">spread out</span>
                 </div>
                 <div class="word-item">
                     <span class="word-term">broadly distributed</span>
-                    <span class="word-trans">широко распространенный</span>
+                    <span class="word-trans">widespread</span>
                 </div>
                 <div class="word-item">
                     <span class="word-term">verifiability</span>
-                    <span class="word-trans">проверяемость</span>
+                    <span class="word-trans">ability to be verified</span>
                 </div>
             </div>
 
             <div class="feature-pills">
-                <div class="pill">⚡ Вставить список</div>
-                <div class="pill">➕ Вручную</div>
-                <div class="pill">📁 Загрузить файл</div>
+                <div class="pill">⚡ Paste a list</div>
+                <div class="pill">➕ Add manually</div>
+                <div class="pill">📁 Upload a file</div>
             </div>
         </div>
     </div>
@@ -321,10 +321,10 @@
             if (submitBtn.disabled) return;
             
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Отправка...';
+            submitBtn.textContent = 'Sending...';
             messageDiv.className = 'form-message';
             messageDiv.style.display = 'block';
-            messageDiv.textContent = 'Отправляем заявку…';
+            messageDiv.textContent = 'Submitting your email…';
             form.setAttribute('aria-busy', 'true');
 
             const formData = new FormData(form);
@@ -341,23 +341,23 @@
                 const result = await response.json();
 
                 if (response.ok && result.success === true) {
-                    messageDiv.textContent = 'Заявка отправлена! Мы сообщим вам о запуске на указанный email.';
+                    messageDiv.textContent = 'You are on the list! We will email you when QVocab launches.';
                     messageDiv.classList.add('success');
                     form.reset();
                 } else {
-                    messageDiv.textContent = 'Не удалось отправить заявку. Попробуйте ещё раз чуть позже.';
+                    messageDiv.textContent = 'We could not submit your email. Please try again in a moment.';
                     messageDiv.classList.add('error');
                 }
             } catch (error) {
                 messageDiv.textContent = error.name === 'AbortError'
-                    ? 'Сервер не ответил вовремя. Не удалось подтвердить отправку. Попробуйте ещё раз.'
-                    : 'Не удалось подтвердить отправку. Проверьте подключение к интернету и попробуйте ещё раз.';
+                    ? 'The server took too long to respond. Please try again.'
+                    : 'We could not confirm your submission. Check your internet connection and try again.';
                 messageDiv.classList.add('error');
             } finally {
                 clearTimeout(timeout);
                 form.removeAttribute('aria-busy');
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Узнать о запуске';
+                submitBtn.textContent = 'Notify me at launch';
             }
         });
     </script>
