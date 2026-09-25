@@ -277,7 +277,7 @@
                     <input type="email" name="email" class="email-input" placeholder="Введите ваш Email" required>
                     <button type="submit" id="submitBtn" class="submit-btn">Узнать о запуске</button>
                 </form>
-                <div id="formMessage" class="form-message"></div>
+                <div id="formMessage" class="form-message" role="status" aria-live="polite" aria-atomic="true"></div>
             </div>
         </div>
 
@@ -318,34 +318,44 @@
 
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
+            if (submitBtn.disabled) return;
             
             submitBtn.disabled = true;
             submitBtn.textContent = 'Отправка...';
             messageDiv.className = 'form-message';
-            messageDiv.style.display = 'none';
+            messageDiv.style.display = 'block';
+            messageDiv.textContent = 'Отправляем заявку…';
+            form.setAttribute('aria-busy', 'true');
 
             const formData = new FormData(form);
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 15000);
 
             try {
                 const response = await fetch('https://api.web3forms.com/submit', {
                     method: 'POST',
-                    body: formData
+                    body: formData,
+                    signal: controller.signal
                 });
 
                 const result = await response.json();
 
-                if (result.success) {
-                    messageDiv.textContent = 'Спасибо! Мы уведомим вас о запуске.';
+                if (response.ok && result.success === true) {
+                    messageDiv.textContent = 'Заявка отправлена! Мы сообщим вам о запуске на указанный email.';
                     messageDiv.classList.add('success');
                     form.reset();
                 } else {
-                    messageDiv.textContent = 'Ошибка отправки. Проверьте ваш Access Key.';
+                    messageDiv.textContent = 'Не удалось отправить заявку. Попробуйте ещё раз чуть позже.';
                     messageDiv.classList.add('error');
                 }
             } catch (error) {
-                messageDiv.textContent = 'Произошла ошибка при отправке формы.';
+                messageDiv.textContent = error.name === 'AbortError'
+                    ? 'Сервер не ответил вовремя. Не удалось подтвердить отправку. Попробуйте ещё раз.'
+                    : 'Не удалось подтвердить отправку. Проверьте подключение к интернету и попробуйте ещё раз.';
                 messageDiv.classList.add('error');
             } finally {
+                clearTimeout(timeout);
+                form.removeAttribute('aria-busy');
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Узнать о запуске';
             }
