@@ -16826,6 +16826,18 @@ html body #english-trainer.et-figma .qv-bottom-progress .et-fill {
   border-radius: 0;
   background: var(--ds-color-cta);
 }
+/* On finish the track belongs to the card and is clipped by its rounded corners. */
+html body #english-trainer.et-figma .et-card &gt; .et-track {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: var(--ds-space-1);
+  margin: 0;
+  border-radius: 0;
+  z-index: 6;
+}
 html body #english-trainer.et-figma[data-view=&quot;train&quot;] .et-card::after {
   display: none !important;
 }
@@ -21218,7 +21230,12 @@ function celebrateCompletedTraining(){
 const renderBeforeCompletionCelebration=render;render=function(...args){const result=renderBeforeCompletionCelebration(...args);celebrateCompletedTraining();return result;};
 
 const finishNavigation=document.createElement(&#x27;div&#x27;);finishNavigation.className=&#x27;qv-finish-navigation&#x27;;finishNavigation.hidden=true;main.append(finishNavigation);
-function syncFinishNavigation(){const mobile=matchMedia(&#x27;(max-width:700px)&#x27;).matches;const mode=state.trainingMode||&#x27;words&#x27;;const view=mode===&#x27;pairs&#x27;?pairsView:mode===&#x27;voice&#x27;?voiceView:mode===&#x27;cards&#x27;?cardsView:q(&#x27;.et-card&#x27;);const group=view.querySelector(mode===&#x27;words&#x27;?&#x27;.et-finish-actions&#x27;:&#x27;.et-pairs-finish-actions&#x27;);const done=root.dataset.view===&#x27;train&#x27;&amp;&amp;(mode===&#x27;words&#x27;?q(&#x27;.et-card&#x27;).classList.contains(&#x27;et-completed&#x27;):!!view.querySelector(&#x27;.et-pairs-finish-title&#x27;));finishNavigation.hidden=!mobile||!done;if(mobile&amp;&amp;done&amp;&amp;group){const buttons=[...group.children].filter(el=&gt;el.tagName===&#x27;BUTTON&#x27;);if(buttons.length&gt;=3){const keep=[buttons[0],buttons[buttons.length-1]];for(const previous of [...finishNavigation.children])if(!keep.includes(previous)&amp;&amp;finishNavigation._qvGroup?.isConnected)finishNavigation._qvGroup.append(previous);finishNavigation.replaceChildren(...keep);finishNavigation._qvGroup=group;}q(&#x27;.qv-mobile-cards-navigation&#x27;)&amp;&amp;(q(&#x27;.qv-mobile-cards-navigation&#x27;).hidden=true);q(&#x27;.et-progress-row&#x27;).after(finishNavigation);}else if(!mobile&amp;&amp;finishNavigation.children.length===2&amp;&amp;finishNavigation._qvGroup?.isConnected){finishNavigation._qvGroup.prepend(finishNavigation.firstElementChild);finishNavigation._qvGroup.append(finishNavigation.lastElementChild);}fitMobileTraining();}
+function syncFinishNavigation(){const mobile=matchMedia(&#x27;(max-width:700px)&#x27;).matches;const mode=state.trainingMode||&#x27;words&#x27;;const view=mode===&#x27;pairs&#x27;?pairsView:mode===&#x27;voice&#x27;?voiceView:mode===&#x27;cards&#x27;?cardsView:q(&#x27;.et-card&#x27;);const group=view.querySelector(mode===&#x27;words&#x27;?&#x27;.et-finish-actions&#x27;:&#x27;.et-pairs-finish-actions&#x27;);const done=root.dataset.view===&#x27;train&#x27;&amp;&amp;(mode===&#x27;words&#x27;?q(&#x27;.et-card&#x27;).classList.contains(&#x27;et-completed&#x27;):!!view.querySelector(&#x27;.et-pairs-finish-title&#x27;));finishNavigation.hidden=!mobile||!done;if(mobile&amp;&amp;done&amp;&amp;group){const buttons=[...group.children].filter(el=&gt;el.tagName===&#x27;BUTTON&#x27;);if(buttons.length&gt;=3){const keep=[buttons[0],buttons[buttons.length-1]];for(const previous of [...finishNavigation.children])if(!keep.includes(previous)&amp;&amp;finishNavigation._qvGroup?.isConnected)finishNavigation._qvGroup.append(previous);finishNavigation.replaceChildren(...keep);finishNavigation._qvGroup=group;}q(&#x27;.qv-mobile-cards-navigation&#x27;)&amp;&amp;(q(&#x27;.qv-mobile-cards-navigation&#x27;).hidden=true);q(&#x27;.et-progress-row&#x27;).after(finishNavigation);}else if(!mobile&amp;&amp;finishNavigation.children.length===2&amp;&amp;finishNavigation._qvGroup?.isConnected){finishNavigation._qvGroup.prepend(finishNavigation.firstElementChild);finishNavigation._qvGroup.append(finishNavigation.lastElementChild);}fitMobileTraining();
+ const progress=q(&#x27;.et-progress-row&#x27;),card=q(&#x27;.et-card&#x27;);
+ const track=progress?.querySelector(&#x27;.et-track&#x27;)||card?.querySelector(&#x27;:scope &gt; .et-track&#x27;);
+ const home=done?card:progress;
+ if(track&amp;&amp;home&amp;&amp;track.parentElement!==home)home.append(track);
+}
 const renderBeforeFinishNavigation=render;render=function(...args){const result=renderBeforeFinishNavigation(...args);syncFinishNavigation();return result;};window.addEventListener(&#x27;resize&#x27;,syncFinishNavigation);
 // Finish screens: hide «Назад» and an inactive «Проработать ошибки», make «Начать заново» the main button.
 function tidyFinishActions(){const mobile=matchMedia(&#x27;(max-width:700px)&#x27;).matches;for(const back of root.querySelectorAll(&#x27;.et-back,.et-pairs-footer button,.qv-mobile-cards-navigation button&#x27;))if(/^(Назад|Back)$/.test(back.textContent.trim())&amp;&amp;!back.closest(&#x27;.et-finish-actions,.et-pairs-finish-actions,.qv-finish-navigation&#x27;))back.hidden=false;for(const box of root.querySelectorAll(&#x27;.et-finish-actions,.et-pairs-finish-actions,.qv-finish-navigation&#x27;)){let retry=null,restart=null;for(const button of box.querySelectorAll(&#x27;button&#x27;)){const text=button.textContent.trim();if(text===&#x27;Назад&#x27;||text===&#x27;Back&#x27;)button.hidden=true;if(/^(Проработать ошибки|Повторить слова|Review mistakes)$/.test(text)){button.hidden=button.disabled;if(!button.disabled)retry=button;}if(/^(Начать заново|Start over)$/.test(text))restart=button;}
